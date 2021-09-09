@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 
 const cors = require('cors');
@@ -45,8 +47,8 @@ class Server {
 
         this.app.get('*', (req, res) => {
     
-            res.status(404).sendFile('C:/Users/gabri/Desktop/Node-Experto/07-restserver/public/404.html');
-        
+            res.status(404).sendFile( path.resolve('./public/404.html') );
+           
         });
 
     };
@@ -55,7 +57,7 @@ class Server {
         
         this.app.listen(this.port, () => {
 
-            console.log(`Servidor corriendo en el puerto ${this.port}`);
+            console.log(`Servidor corriendo en http://localhost:${this.port}`);
     
         });
     };
