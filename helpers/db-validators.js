@@ -40,11 +40,19 @@ const existeEmail = async (correo = '') => {
 
 const existeUsuarioById = async (id) => {
 
-    const existeUsuario = await Usuario.findById(id)
+    try{
 
-    if (!existeUsuario) {
+        const existeUsuario = await Usuario.findById(id)
+
+        if (!existeUsuario) {
+
+            throw new Error();
+        };
+
+    } catch (error) {
 
         throw new Error(`El id ${id}, no existe.`);
+
     };
 };
 

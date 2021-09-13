@@ -8,13 +8,21 @@ const usuariosGet = async (req = request, res = response) => {
 
     let {limite = 5, desde = 0} = req.query;
 
-    const usuarios = await Usuario.find()
-        .skip( (isNaN(desde) ) ? desde = 0 : Number(desde) )
-        .limit( (isNaN(limite) ) ? limite = 5 : Number(limite) );
+    const query = {estado: true};
+
+    const [total, usuarios] = await Promise.all([
+        
+        Usuario.countDocuments(query),
+        Usuario.find(query)
+            .skip( (isNaN(desde) ) ? desde = 0 : Number(desde) )
+            .limit( (isNaN(limite) ) ? limite = 5 : Number(limite) ),
+        
+    ]);
 
     res.json({
-        
-       usuarios
+
+        total,
+        usuarios,
     });
 };
 
@@ -31,7 +39,6 @@ const usuariosPut = async (req = request, res = response) => {
         const salt = bcryptjs.genSaltSync();
 
         restoArgumentos.password = bcryptjs.hashSync(password, salt);
-
     };
 
     if (rol) {
@@ -63,11 +70,17 @@ const usuariosPost = async (req = request, res = response) => {
     res.status(201).json(usuario);
 };
 
-const usuariosDelete = (req = request, res = response) => {
+const usuariosDelete = async (req = request, res = response) => {
 
-    res.json({
-        msg: 'delete API - usuariosDelete',
-    });
+    const id = req.params.id;
+
+    // Eliminación física de la Base de Datos.
+
+    // const usuario = await Usuario.findByIdAndDelete(id);
+
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+
+    res.json(usuario);
     
 };
 
