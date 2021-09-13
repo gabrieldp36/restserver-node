@@ -8,7 +8,8 @@ const {esRolValidoPost,
     esRolValidoPut, 
     existeEmail, 
     existeUsuarioById,
-    passwordPut} = require('../helpers/db-validators');
+    passwordPut,
+    esEstadoValido} = require('../helpers/db-validators');
 
 const router = Router();
 
@@ -29,6 +30,8 @@ router.put('/:id', [
     check('password').custom(passwordPut),
 
     check('rol').custom(esRolValidoPut),
+
+    check('estado').custom(esEstadoValido),
 
     validarCampos,
 

@@ -64,6 +64,14 @@ const passwordPut = async (password = '') => {
     };
 };
 
+const esEstadoValido = async (estado) => {
+
+    if ( !(estado === 'true') || (estado === 'false') ) {
+
+        throw new Error('Mediante una petición de tipo PUT, el estado solo puede ser actualizado a true.');
+    };
+};
+
 module.exports = {
 
     esRolValidoPost,
@@ -71,4 +79,5 @@ module.exports = {
     existeEmail,
     existeUsuarioById,
     passwordPut,
+    esEstadoValido,
 };
