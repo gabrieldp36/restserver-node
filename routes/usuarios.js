@@ -4,12 +4,14 @@ const {check} = require('express-validator');
 
 const {validarCampos} = require('../middleware/validar-campos');
 
-const {esRolValidoPost, 
-    esRolValidoPut, 
-    existeEmail, 
+const { esRolValidoPost,
+    existeEmail,
     existeUsuarioById,
+    passwordPost,
+    esRolValidoPut,
     passwordPut,
-    esEstadoValido} = require('../helpers/db-validators');
+    esEstadoValidoPut,
+    validacionEmailPut,} = require('../helpers/db-validators');
 
 const router = Router();
 
@@ -27,11 +29,13 @@ router.put('/:id', [
     
     check('id').custom(existeUsuarioById),
 
+    check('correo').custom(validacionEmailPut),
+
     check('password').custom(passwordPut),
 
     check('rol').custom(esRolValidoPut),
 
-    check('estado').custom(esEstadoValido),
+    check('estado').custom(esEstadoValidoPut),
 
     validarCampos,
 
@@ -47,7 +51,9 @@ router.post('/', [
 
     check('correo').custom(existeEmail),
 
-    check('password', 'El password debe contener al menos 8 caracteres.').isLength({min: 8}),
+    // check('password', 'El password debe contener al menos 8 caracteres.').isLength({min: 8}),
+
+    check('password').custom(passwordPost),
 
     // check('rol', 'No es un rol permitido.').isIn( ['ADMIN_ROLE', 'USER_ROLE'] ),
 

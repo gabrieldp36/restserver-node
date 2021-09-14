@@ -8,7 +8,7 @@ const esRolValidoPost = async (rol = '') => {
 
     if (rol.length === 0) {
 
-        throw new Error(`El rol es obligatorio.`);
+        throw new Error('El rol es obligatorio.');
 
     } else if (!existeRol && rol.length > 0) {
 
@@ -16,20 +16,9 @@ const esRolValidoPost = async (rol = '') => {
     };
 };
 
-const esRolValidoPut = async (rol = '') => {
-
-    const existeRol = await Role.findOne({rol});
-
-    if (!existeRol && rol.length > 0) {
-
-        throw new Error(`El rol ${rol} no se encuentra registrado en la base de datos.` );
-
-    };
-};
-
 const existeEmail = async (correo = '') => {
 
-    const existeCorreo = await Usuario.findOne({correo});
+    const existeCorreo = await Usuario.findOne( {correo} );
 
     if (existeCorreo) {
 
@@ -56,28 +45,78 @@ const existeUsuarioById = async (id) => {
     };
 };
 
-const passwordPut = async (password = '') => {
+const passwordPost = async ( password = '' ) => {
 
-    if (password.length > 0 && password.length < 8) {
+    validarPassword(password);
+};
 
-        throw new Error('El password debe contener al menos 8 caracteres.');
+const esRolValidoPut = async (rol = '') => {
+
+    const existeRol = await Role.findOne( {rol} );
+
+    if (!existeRol && rol.length > 0) {
+
+        throw new Error(`El rol ${rol} no se encuentra registrado en la base de datos.`);
+
     };
 };
 
-const esEstadoValido = async (estado) => {
+const passwordPut = async (password = '') => {
 
-    if ( !(estado === 'true') || (estado === 'false') ) {
+    if (password.length > 0 ) {
+
+        validarPassword(password);
+    };  
+};
+
+const esEstadoValidoPut = async (estado) => {
+
+    if ( ( !(estado === 'true') || (estado === 'false') ) && !(estado === undefined) && estado.length > 0) { 
 
         throw new Error('Mediante una petición de tipo PUT, el estado solo puede ser actualizado a true.');
+
+    };
+};
+
+const validacionEmailPut = async (correo = '') => {
+
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    const existeCorreo = await Usuario.findOne( {correo} );
+
+    if (existeCorreo) {
+
+        throw new Error(`El e-mail: ${correo}, ya se encuentra registrado.`);
+
+    } else if (!existeCorreo) {
+    
+        if ( !emailRegex.test(correo) && correo.length > 0) {
+
+            throw new Error('El correo ingresado no es válido.');
+
+        };
+    };
+};
+
+const validarPassword = ( password = '' ) => {
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+    if ( !passwordRegex.test(password) ) {
+
+        throw new Error('La contraseña debe contener mínimo ocho caracteres, al menos una letra mayúscula, una letra minúscula y un número, sin caracteres especiales.');
+
     };
 };
 
 module.exports = {
 
     esRolValidoPost,
-    esRolValidoPut,
     existeEmail,
     existeUsuarioById,
+    passwordPost,
+    esRolValidoPut,
     passwordPut,
-    esEstadoValido,
+    esEstadoValidoPut,
+    validacionEmailPut,
 };

@@ -30,7 +30,7 @@ const usuariosPut = async (req = request, res = response) => {
 
     const id = req.params.id;
 
-    const {_id, password, google, correo, rol, ...restoArgumentos} = req.body;
+    const {_id, google, password, correo, rol, estado, ...restoArgumentos} = req.body;
 
     if (password && password.length > 0) {
 
@@ -41,9 +41,19 @@ const usuariosPut = async (req = request, res = response) => {
         restoArgumentos.password = bcryptjs.hashSync(password, salt);
     };
 
+    if (correo) {
+
+        restoArgumentos.correo = correo;
+    };
+
     if (rol) {
 
         restoArgumentos.rol = rol;
+    };
+
+    if (estado) {
+
+        restoArgumentos.estado = estado;
     };
 
     const usuario = await Usuario.findByIdAndUpdate( id, restoArgumentos, {new: true} );
@@ -55,7 +65,7 @@ const usuariosPost = async (req = request, res = response) => {
 
     const {nombre, apellido, correo, password, img, rol } = req.body;
 
-    const usuario = new Usuario({nombre, apellido, correo, password, img, rol });
+    const usuario = new Usuario( {nombre, apellido, correo, password, img, rol } );
 
     // Encriptar la contraseña.
 
@@ -78,7 +88,7 @@ const usuariosDelete = async (req = request, res = response) => {
 
     // const usuario = await Usuario.findByIdAndDelete(id);
 
-    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    const usuario = await Usuario.findByIdAndUpdate( id, {estado: false} );
 
     res.json(usuario);
     
