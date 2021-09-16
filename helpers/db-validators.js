@@ -2,31 +2,6 @@ const Role = require('../models/role');
 
 const Usuario = require('../models/usuario');
 
-const esRolValidoPost = async (rol = '') => {
-
-    const existeRol = await Role.findOne({rol});
-
-    if (rol.length === 0) {
-
-        throw new Error('El rol es obligatorio.');
-
-    } else if (!existeRol && rol.length > 0) {
-
-        throw new Error(`El rol ${rol} no se encuentra registrado en la base de datos.` );
-    };
-};
-
-const existeEmail = async (correo = '') => {
-
-    const existeCorreo = await Usuario.findOne( {correo} );
-
-    if (existeCorreo) {
-
-        throw new Error(`El e-mail: ${correo}, ya se encuentra registrado.`);
-
-    };
-};
-
 const existeUsuarioById = async (id) => {
 
     try{
@@ -45,9 +20,66 @@ const existeUsuarioById = async (id) => {
     };
 };
 
+const esRolValidoPost = async (rol = '') => {
+
+    const existeRol = await Role.findOne({rol});
+
+    if (rol.length === 0) {
+
+        throw new Error('El rol es obligatorio.');
+
+    } else if (!existeRol && rol.length > 0) {
+
+        throw new Error(`El rol ${rol} no se encuentra registrado en la base de datos.` );
+    };
+};
+
+const validacionEmailPost= async (correo = '') => {
+
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    const existeCorreo = await Usuario.findOne( {correo} );
+
+    if (correo.length === 0) {
+
+        throw new Error('El correo es obligatorio.');
+
+    } else if (existeCorreo) {
+
+        throw new Error(`El e-mail: ${correo}, ya se encuentra registrado.`);
+
+    } else if (!existeCorreo) {
+    
+        if ( correo.length > 0 && !emailRegex.test(correo) ) {
+
+            throw new Error('El correo ingresado no es válido.');
+        };
+    };
+};
+
 const passwordPost = async ( password = '' ) => {
 
     validarPassword(password);
+};
+
+const validacionEmailPut= async (correo = '') => {
+
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    const existeCorreo = await Usuario.findOne( {correo} );
+
+    if (existeCorreo) {
+
+        throw new Error(`El e-mail: ${correo}, ya se encuentra registrado.`);
+
+    } else if (!existeCorreo) {
+    
+        if ( correo.length > 0 && !emailRegex.test(correo) ) {
+
+            throw new Error('El correo ingresado no es válido.');
+
+        };
+    };
 };
 
 const esRolValidoPut = async (rol = '') => {
@@ -78,26 +110,6 @@ const esEstadoValidoPut = async (estado) => {
     };
 };
 
-const validacionEmailPut = async (correo = '') => {
-
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-    const existeCorreo = await Usuario.findOne( {correo} );
-
-    if (existeCorreo) {
-
-        throw new Error(`El e-mail: ${correo}, ya se encuentra registrado.`);
-
-    } else if (!existeCorreo) {
-    
-        if ( !emailRegex.test(correo) && correo.length > 0) {
-
-            throw new Error('El correo ingresado no es válido.');
-
-        };
-    };
-};
-
 const validarPassword = ( password = '' ) => {
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -109,14 +121,29 @@ const validarPassword = ( password = '' ) => {
     };
 };
 
+const validacionEmailAuth= async (correo = '') => {
+
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (correo.length === 0) {
+
+        throw new Error('El correo es obligatorio.');
+
+    } else if ( correo.length > 0 && !emailRegex.test(correo) ) {
+
+         throw new Error('El correo ingresado no es válido.');
+    };
+};
+
 module.exports = {
 
-    esRolValidoPost,
-    existeEmail,
     existeUsuarioById,
+    esRolValidoPost,
+    validacionEmailPost,
     passwordPost,
+    validacionEmailPut,
     esRolValidoPut,
     passwordPut,
     esEstadoValidoPut,
-    validacionEmailPut,
+    validacionEmailAuth,
 };

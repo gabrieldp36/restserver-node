@@ -2,28 +2,49 @@ const {Router} = require('express');
 
 const {check} = require('express-validator');
 
-const {validarCampos} = require('../middleware/validar-campos');
+const {validarCampos, 
+    validarJWT, 
+    esAdminRole,
+    tieneRolRequerido} = require('../middleware');
 
-const { esRolValidoPost,
-    existeEmail,
-    existeUsuarioById,
+const { existeUsuarioById,
+    esRolValidoPost,
+    validacionEmailPost,
     passwordPost,
+    validacionEmailPut,
     esRolValidoPut,
     passwordPut,
-    esEstadoValidoPut,
-    validacionEmailPut,} = require('../helpers/db-validators');
-
-const router = Router();
+    esEstadoValidoPut} = require('../helpers/db-validators');
 
 const {usuariosGet, 
     usuariosPut, 
     usuariosPost,
     usuariosDelete,
-    usuariosPatch} = require('../controllers/usuarios')
+    usuariosPatch} = require('../controllers/usuarios');
 
-router.get('/', usuariosGet);
+const router = Router();
+
+router.get('/', [
+
+    validarJWT,
+
+    esAdminRole,
+
+    // Validar múltiples roles.
+
+    // tieneRolRequerido('ADMIN_ROLE', 'VENTAS_ROLE'),
+
+], usuariosGet);
 
 router.put('/:id', [
+
+    validarJWT,
+
+    esAdminRole,
+
+    // Validar múltiples roles.
+
+    // tieneRolRequerido('ADMIN_ROLE', 'VENTAS_ROLE'),
 
     check('id', 'El id ingresado no es válido.').isMongoId(),
     
@@ -43,19 +64,21 @@ router.put('/:id', [
 
 router.post('/', [
 
+    validarJWT,
+
+    esAdminRole,
+
+    // Validar múltiples roles.
+
+    // tieneRolRequerido('ADMIN_ROLE', 'VENTAS_ROLE'),
+
     check('nombre', 'El nombre es obligatorio.').notEmpty(),
 
     check('apellido', 'El apellido es obligatorio.').notEmpty(),
 
-    check('correo', 'El correo ingresado no es válido.').isEmail(),
-
-    check('correo').custom(existeEmail),
-
-    // check('password', 'El password debe contener al menos 8 caracteres.').isLength({min: 8}),
+    check('correo').custom(validacionEmailPost),
 
     check('password').custom(passwordPost),
-
-    // check('rol', 'No es un rol permitido.').isIn( ['ADMIN_ROLE', 'USER_ROLE'] ),
 
     check('rol').custom(esRolValidoPost),
 
@@ -65,6 +88,14 @@ router.post('/', [
 
 router.delete('/:id',[
 
+    validarJWT,
+
+    esAdminRole,
+
+    // Validar múltiples roles.
+
+    // tieneRolRequerido('ADMIN_ROLE', 'VENTAS_ROLE'),
+    
     check('id', 'El id ingresado no es válido.').isMongoId(),
     
     check('id').custom(existeUsuarioById),
