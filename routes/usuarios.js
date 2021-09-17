@@ -5,7 +5,7 @@ const {check} = require('express-validator');
 const {validarCampos, 
     validarJWT, 
     esAdminRole,
-    tieneRolRequerido} = require('../middleware');
+    tieneRolRequerido,} = require('../middleware');
 
 const { existeUsuarioById,
     esRolValidoPost,
@@ -14,13 +14,12 @@ const { existeUsuarioById,
     validacionEmailPut,
     esRolValidoPut,
     passwordPut,
-    esEstadoValidoPut} = require('../helpers/db-validators');
+    esEstadoValidoPut,} = require('../helpers');
 
 const {usuariosGet, 
     usuariosPut, 
     usuariosPost,
-    usuariosDelete,
-    usuariosPatch} = require('../controllers/usuarios');
+    usuariosDelete,} = require('../controllers/usuarios');
 
 const router = Router();
 
@@ -103,7 +102,5 @@ router.delete('/:id',[
     validarCampos,
 
 ], usuariosDelete);
-
-router.patch('/', usuariosPatch);
 
 module.exports = router;

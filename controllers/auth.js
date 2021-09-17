@@ -4,7 +4,7 @@ const bcryptjs = require('bcryptjs');
 
 const Usuario = require('../models/usuario');
 
-const {generacionJWT} = require('../helpers/gerenacion-jwt');
+const {generacionJWT, googleVerify} = require('../helpers');
 
 const login = async (req = request, res = response) => {
 
@@ -67,7 +67,64 @@ const login = async (req = request, res = response) => {
     };
 };
 
+const googleSingIn = async (req = request, res = response) => {
+
+    const {id_token} = req.body;
+
+    try{
+
+        const {nombre, apellido, correo, img} = await googleVerify(id_token);
+
+        let usuario = await Usuario.findOne( {correo} );
+
+        if (!usuario) {
+
+            const data = {
+                nombre,
+                apellido,
+                correo,
+                password: '-',
+                img,
+                google: true,
+            };
+
+            usuario = new Usuario(data);
+
+            await usuario.save();
+        };
+
+        // Verificamos que el usuario autenticado con las credenciales de google,
+        // no haya sido eliminado de nuestra base de datos.
+
+        if (!usuario.estado) {
+
+            return res.status(401).json({
+
+                msg: 'Consulte con el administrador, usuario bloqueado.'
+            });
+        };
+
+        const token = await generacionJWT(usuario.id)
+        
+        res.json({
+
+            usuario,
+            token,
+        });
+
+    } catch (error) {
+
+        console.log(error)
+
+        res.status(400).json({
+
+            msg: 'Token de Google inválido.'
+        });
+    };
+};
+
 module.exports = {
 
     login,
+    googleSingIn,
 };
