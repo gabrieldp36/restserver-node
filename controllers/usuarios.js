@@ -2,20 +2,20 @@ const {response, request} = require('express');
 
 const bcryptjs = require('bcryptjs');
 
-const Usuario = require('../models/usuario');
+const {Usuario} = require('../models');
 
 const usuariosGet = async (req = request, res = response) => {
 
-    let {limite = 5, desde = 0} = req.query;
+    let {limite = 0, desde = 0} = req.query;
 
-    const query = {estado: true};
+    const usuariosActivos = {estado: true};
 
     const [total, usuarios] = await Promise.all([
         
-        Usuario.countDocuments(query),
-        Usuario.find(query)
-            .skip( (isNaN(desde) ) ? desde = 0 : Number(desde) )
-            .limit( (isNaN(limite) ) ? limite = 5 : Number(limite) ),
+        Usuario.countDocuments(usuariosActivos),
+        Usuario.find(usuariosActivos)
+            .skip( (isNaN(desde) ) ? desde : Number(desde) )
+            .limit( (isNaN(limite) ) ? limite : Number(limite) ),
         
     ]);
 
@@ -24,41 +24,6 @@ const usuariosGet = async (req = request, res = response) => {
         total,
         usuarios,
     });
-};
-
-const usuariosPut = async (req = request, res = response) => {
-
-    const id = req.params.id;
-
-    const {_id, google, password, correo, rol, estado, ...restoArgumentos} = req.body;
-
-    if (password && password.length > 0) {
-
-        // Encriptamos el nuevo password del usuario.
-
-        const salt = bcryptjs.genSaltSync();
-
-        restoArgumentos.password = bcryptjs.hashSync(password, salt);
-    };
-
-    if (correo) {
-
-        restoArgumentos.correo = correo;
-    };
-
-    if (rol) {
-
-        restoArgumentos.rol = rol;
-    };
-
-    if (estado) {
-
-        restoArgumentos.estado = estado;
-    };
-
-    const usuario = await Usuario.findByIdAndUpdate( id, restoArgumentos, {new: true} );
-
-    res.json(usuario,);
 };
 
 const usuariosPost = async (req = request, res = response) => {
@@ -80,6 +45,53 @@ const usuariosPost = async (req = request, res = response) => {
     res.status(201).json(usuario);
 };
 
+const usuariosPut = async (req = request, res = response) => {
+
+    const id = req.params.id;
+
+    const {__v, _id, google, nombre, apellido, correo, password, rol, estado} = req.body;
+
+    const data = {};
+    
+    if (nombre) {
+
+        data.nombre = nombre;
+    };
+
+    if (apellido) {
+
+        data.apellido = apellido;
+    };
+
+    if (correo) {
+
+        data.correo = correo;
+    };
+
+    if (password && password.length > 0) {
+
+        // Encriptamos el nuevo password del usuario.
+
+        const salt = bcryptjs.genSaltSync();
+
+        data.password = bcryptjs.hashSync(password, salt);
+    };
+
+    if (rol) {
+
+        data.rol = rol;
+    };
+
+    if (estado) {
+
+        data.estado = estado;
+    };
+
+    const usuario = await Usuario.findByIdAndUpdate( id, data, {new: true} );
+
+    res.json(usuario);
+};
+
 const usuariosDelete = async (req = request, res = response) => {
 
     const id = req.params.id;
@@ -89,8 +101,6 @@ const usuariosDelete = async (req = request, res = response) => {
     // const usuario = await Usuario.findByIdAndDelete(id);
 
     const usuario = await Usuario.findByIdAndUpdate( id, {estado: false} );
-
-    const usuarioAutenticado = req.usuarioAuth;
 
     res.json(usuario);
     

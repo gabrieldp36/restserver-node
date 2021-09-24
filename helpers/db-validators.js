@@ -1,23 +1,16 @@
-const Role = require('../models/role');
+const {Role} = require('../models');
 
-const Usuario = require('../models/usuario');
+const {Usuario} = require('../models');
 
 const existeUsuarioById = async (id) => {
 
-    try{
+    const existeUsuario = await Usuario.findById(id)
 
-        const existeUsuario = await Usuario.findById(id)
-
-        if (!existeUsuario) {
-
-            throw new Error();
-        };
-
-    } catch (error) {
+    if (!existeUsuario) {
 
         throw new Error(`El id ${id}, no existe.`);
-
     };
+
 };
 
 const esRolValidoPost = async (rol = '') => {
@@ -103,7 +96,11 @@ const passwordPut = async (password = '') => {
 
 const esEstadoValidoPut = async (estado) => {
 
-    if ( ( !(estado === 'true') || (estado === 'false') ) && !(estado === undefined) && estado.length > 0) { 
+    if (estado === undefined) {
+
+        return;
+
+    } else if ( !(estado === true) || (estado === false) || estado.length === 0 ) { 
 
         throw new Error('Mediante una petición de tipo PUT, el estado solo puede ser actualizado a true.');
 
@@ -131,7 +128,7 @@ const validacionEmailAuth= async (correo = '') => {
 
     } else if ( correo.length > 0 && !emailRegex.test(correo) ) {
 
-         throw new Error('El correo ingresado no es válido.');
+        throw new Error('El correo ingresado no es válido.');
     };
 };
 

@@ -2,11 +2,11 @@ const {Router} = require('express');
 
 const {check} = require('express-validator');
 
-const {login, googleSingIn} = require('../controllers/auth')
+const {login, googleSingIn} = require('../controllers')
 
-const {validarCampos} = require('../middleware/validar-campos');
+const {validarCampos} = require('../middleware');
 
-const {validacionEmailAuth} = require('../helpers/db-validators')
+const {validacionEmailAuth} = require('../helpers')
 
 const router = Router();
 
