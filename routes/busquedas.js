@@ -1,24 +1,19 @@
 const {Router} = require('express');
 
-const {buscar, 
-    buscarUsuarios, 
-    buscarProductosPorCategoria} = require('../controllers');
+const {buscar, buscarProductosPorCategoria} = require('../controllers');
 
-const {validarJWT, 
-    esAdminRole,} = require('../middleware');
+const {esAdminRoleColeccionUsuarios, validarJWTColeccionUsarios, validarCampos,} = require('../middleware');
 
 const router = Router();
 
-router.get('/usuarios/:termino', [
-    
-    validarJWT, 
+router.get('/:coleccion/:termino', [
 
-    esAdminRole, 
+    validarJWTColeccionUsarios,
 
-], buscarUsuarios);
+    esAdminRoleColeccionUsuarios,
+
+], buscar);
 
 router.get('/categorias/productos/:termino', buscarProductosPorCategoria);
-
-router.get('/:coleccion/:termino', buscar);
 
 module.exports = router;

@@ -8,6 +8,8 @@ const productosControllers = require('../controllers/productos');
 
 const usuariosControllers = require('../controllers/usuarios');
 
+const uploadsControllers = require('../controllers/uploads');
+
 module.exports = {
     
     ...authControllers,
@@ -15,4 +17,5 @@ module.exports = {
     ...categoriasControllers,
     ...productosControllers,
     ...usuariosControllers,
+    ...uploadsControllers,
 };

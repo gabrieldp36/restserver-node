@@ -72,7 +72,6 @@ const crearCategoria = async (req = request, res = response) => {
         categoria.save(),
         
         categoria.populate({path:'usuario', select: ['nombre', 'apellido']}),
-
     ]);
 
     res.status(201).json(categoria);
@@ -100,7 +99,7 @@ const actualizarCategoria = async (req = request, res = response) => {
         
     const categoria = await Categoria.findByIdAndUpdate( id, data, {new: true} ).populate({path:'usuario', select: ['nombre', 'apellido']});
 
-    res.json(categoria);
+    res.status(201).json(categoria);
 };
 
 const borrarCategoria = async (req = request, res = response) => {

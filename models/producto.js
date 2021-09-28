@@ -28,6 +28,10 @@ const ProductoSchema = Schema({
         default: true,
     },
 
+    img: {
+        type: String,
+    },
+
     categoria: { 
         type: Schema.Types.ObjectId,
         ref: 'Categoria',
@@ -39,7 +43,6 @@ const ProductoSchema = Schema({
         ref: 'Usuario',
         required: true,
     },
-
 });
 
 ProductoSchema.methods.toJSON = function () {
@@ -61,7 +64,6 @@ ProductoSchema.methods.toJSON = function () {
     producto.usuario = usuario;
 
     return producto;
-    
 };
 
 module.exports = model('Producto', ProductoSchema);

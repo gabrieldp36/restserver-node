@@ -2,7 +2,6 @@ var url = ( window.location.hostname.includes('localhost') )
             ? `http://localhost:${window.location.port}/api/auth/google`
             : `https://restserver-node-gdp.herokuapp.com/api/auth/google`
 
-
 window.onSuccess = function (googleUser) {
 
     var profile = googleUser.getBasicProfile();
@@ -25,7 +24,6 @@ window.onSuccess = function (googleUser) {
     .then ( response => response.json() )
     .then ( data => console.log( 'Nuestro Server', data ) )
     .catch(console.log);
-
 };
 
 window.onFailure = function (error) {
@@ -44,9 +42,7 @@ window.renderButton = function () {
         'theme': 'dark',
         'onsuccess': onSuccess,
         'onfailure': onFailure
-
     });
-
 };
 
 function signOut() {

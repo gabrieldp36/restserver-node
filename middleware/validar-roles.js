@@ -21,7 +21,6 @@ const esAdminRole = (req = request, res = response, next) => {
     };
 
     next()
-
 };
 
 const tieneRolRequerido = (...roles) => {
@@ -49,8 +48,41 @@ const tieneRolRequerido = (...roles) => {
     };
 };
 
+const esAdminRoleColeccionUsuarios = (req = request, res = response, next) => {
+
+    const {coleccion} = req.params;
+
+    if (coleccion === 'usuarios') {
+
+        if (!req.usuarioAuth) {
+
+            return res.status(500).json({
+    
+                msg: 'Se quiere validar el rol sin antes haberse verificado previamente el token.'
+            });
+        };
+    
+        const {nombre, apellido, rol} = req.usuarioAuth;
+    
+        if (rol !== 'ADMIN_ROLE') {
+    
+            return res.status(401).json({
+    
+                msg: `${nombre} ${apellido} no es administrador.`
+            });
+        };
+
+        next();
+
+    } else {
+
+        next()
+    };
+};
+
 module.exports = {
 
     esAdminRole,
     tieneRolRequerido,
+    esAdminRoleColeccionUsuarios
 };

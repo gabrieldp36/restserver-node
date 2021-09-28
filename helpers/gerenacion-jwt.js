@@ -21,7 +21,6 @@ const generacionJWT = (uid) => {
             } else {
 
                 resolve(token);
-
             };
         });
     });

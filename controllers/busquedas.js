@@ -7,31 +7,38 @@ const {buscarUsuario,
 
 const collecionesPermitidas = [
 
-    'CATEGORIAS',
-    'PRODUCTOS',
+    'categorias',
+    'productos',
+    'usuarios',
 ];
 
 const buscar = (req = request, res = response) => {
 
     const {coleccion, termino} = req.params;
 
-    if ( !collecionesPermitidas.includes( coleccion.toUpperCase() ) ) {
+    if ( !collecionesPermitidas.includes(coleccion) ) {
 
         return res.status(400).json({
 
-            msg: `Las coleciones permitidas para búsquedas públicas son las siguentes: ${collecionesPermitidas}`,
+            msg: `Las coleciones permitidas para búsquedas son las siguentes: ${collecionesPermitidas}`,
         });
     };
 
-    switch( coleccion.toUpperCase() ) {
+    switch(coleccion) {
 
-        case 'CATEGORIAS':
+        case 'usuarios':
+
+            buscarUsuario(termino, res);
+        
+        break;
+
+        case 'categorias':
 
             buscarCategoria(termino, res);
         
         break;
 
-        case 'PRODUCTOS':
+        case 'productos':
 
             buscarProductos(termino, res);
         
@@ -46,13 +53,6 @@ const buscar = (req = request, res = response) => {
     };
 };
 
-const buscarUsuarios = async (req = request, res = response) =>{
-    
-    const {termino} = req.params;
-
-    buscarUsuario(termino, res);
-};
-
 const buscarProductosPorCategoria = async (req = request, res = response) =>{
     
     const {termino} = req.params;
@@ -63,6 +63,5 @@ const buscarProductosPorCategoria = async (req = request, res = response) =>{
 module.exports = {
 
     buscar,
-    buscarUsuarios,
     buscarProductosPorCategoria,
 };

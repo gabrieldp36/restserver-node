@@ -89,7 +89,7 @@ const usuariosPut = async (req = request, res = response) => {
 
     const usuario = await Usuario.findByIdAndUpdate( id, data, {new: true} );
 
-    res.json(usuario);
+    res.status(201).json(usuario);
 };
 
 const usuariosDelete = async (req = request, res = response) => {
@@ -103,7 +103,6 @@ const usuariosDelete = async (req = request, res = response) => {
     const usuario = await Usuario.findByIdAndUpdate( id, {estado: false} );
 
     res.json(usuario);
-    
 };
 
 module.exports = {

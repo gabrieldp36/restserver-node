@@ -34,7 +34,6 @@ CategoriaSchema.methods.toJSON = function () {
     categoria.usuario = usuario;
 
     return categoria;
-    
 };
 
 module.exports = model('Categoria', CategoriaSchema);

@@ -76,6 +76,7 @@ const crearProducto = async (req = request, res = response) => {
         nombre,
         precio: req.body.precio,
         descripcion: req.body.descripcion,
+        img: req.body.img,
         categoria: req.body.categoria,
         usuario: req.usuarioAuth._id,
     };
@@ -147,7 +148,7 @@ const actualizarProducto = async (req = request, res = response) => {
                         .populate('categoria', 'nombre')
                         .populate({path:'usuario', select: ['nombre', 'apellido']});
 
-    res.json(producto);
+    res.status(201).json(producto);
 };
 
 const borrarProducto = async (req = request, res = response) => {

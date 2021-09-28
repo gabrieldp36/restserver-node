@@ -115,7 +115,7 @@ const buscarCategoria = async (termino, res) => {
             total,
             categorias: (categorias.length === 0) ?  ['No existen categorías.'] : categorias,
         });
-    }
+    };
 };
 
 const buscarProductos = async (termino, res) => {
@@ -137,8 +137,6 @@ const buscarProductos = async (termino, res) => {
 
         const regex = RegExp(ignorarCaracteresEspeciales(termino), 'i');
         
-        console.log(regex)
-
         const elementos = await Producto.find({nombre: regex, estado:true})
             .populate({path: 'categoria', select: ['nombre', 'estado']})
             .populate({path:'usuario', select: ['nombre', 'apellido']});
