@@ -104,7 +104,9 @@ const googleSingIn = async (req = request, res = response) => {
             });
         };
 
-        const token = await generacionJWT(usuario.id)
+        // Generamos el JWT.
+
+        const token = await generacionJWT(usuario.id);
         
         res.json({
 

@@ -37,6 +37,8 @@ class Server {
 
         this.routes();
 
+        // Listen.
+
         this.listen();
     };
 
