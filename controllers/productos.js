@@ -115,7 +115,7 @@ const actualizarProducto = async (req = request, res = response) => {
 
     const data = {};
 
-    if (nombre) {
+    if ( !nombre === undefined && nombre.trim() ) {
 
         data.nombre = nombre.toUpperCase();
     };

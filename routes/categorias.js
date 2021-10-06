@@ -9,8 +9,9 @@ const {crearCategoria,
     borrarCategoria,} = require('../controllers');
 
 const {existeCategoriaPorId,
+    esNombreValido,
     existeNombreCategoria,
-    esEstadoValidoPut,} = require('../helpers');
+    esEstadoValidoPut} = require('../helpers');
 
 const {validarCampos, 
     validarJWT, 
@@ -45,7 +46,7 @@ router.post('/', [
 
     tieneRolRequerido('ADMIN_ROLE', 'VENTAS_ROLE', 'USER_ROLE'),
 
-    check('nombre', 'El nombre es obligatorio.').notEmpty(),
+    check('nombre').custom(esNombreValido),
 
     validarCampos,
 

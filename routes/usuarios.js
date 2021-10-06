@@ -13,6 +13,8 @@ const {validarCampos,
     tieneRolRequerido,} = require('../middleware');
 
 const { existeUsuarioById,
+    esNombreValido,
+    esApellidoValido,
     esRolValidoPost,
     validacionEmailPost,
     passwordPost,
@@ -75,9 +77,9 @@ router.post('/', [
 
     // tieneRolRequerido('ADMIN_ROLE', 'VENTAS_ROLE'),
 
-    check('nombre', 'El nombre es obligatorio.').notEmpty(),
+    check('nombre').custom(esNombreValido),
 
-    check('apellido', 'El apellido es obligatorio.').notEmpty(),
+    check('apellido').custom(esApellidoValido),
 
     check('correo').custom(validacionEmailPost),
 

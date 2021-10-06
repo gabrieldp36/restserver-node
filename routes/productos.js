@@ -9,6 +9,7 @@ const {crearProducto,
     borrarProducto} = require('../controllers');
 
 const {existeCategoriaPorId,
+    esNombreValido,
     esPrecioValido,
     existeProductoPorId,
     existeNombreProducto,
@@ -58,13 +59,13 @@ router.post('/',[
 
     validarCampos,
 
-    check('nombre', 'El nombre es obligatorio.').notEmpty(),
+    check('nombre').custom(esNombreValido),
 
     check('categoria', 'La categoría es obligatoria.').notEmpty(),
 
     check('precio').custom(esPrecioValido),
 
-    validarCampos, 
+    validarCampos,
 
 ], crearProducto);
 

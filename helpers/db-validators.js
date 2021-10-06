@@ -13,6 +13,26 @@ const existeUsuarioById = async (id) => {
 
 };
 
+const esNombreValido = async ( nombre = '') => {
+
+    const texto = nombre.trim();
+
+    if (texto.length === 0) {
+
+        throw new Error('El nombre es obligatorio.');
+    };
+};
+
+const esApellidoValido = async ( apellido = '') => {
+
+    const texto = apellido.trim();
+
+    if (texto.length === 0) {
+
+        throw new Error('El apellido es obligatorio.');
+    };
+};
+
 const esRolValidoPost = async (rol = '') => {
 
     const existeRol = await Role.findOne({rol});
@@ -135,6 +155,8 @@ const validacionEmailAuth= async (correo = '') => {
 module.exports = {
 
     existeUsuarioById,
+    esNombreValido,
+    esApellidoValido,
     esRolValidoPost,
     validacionEmailPost,
     passwordPost,
