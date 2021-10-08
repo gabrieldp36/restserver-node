@@ -2,7 +2,7 @@ var url = ( window.location.hostname.includes('localhost') )
             ? `http://localhost:${window.location.port}/api/auth/google`
             : `https://restserver-node-gdp.herokuapp.com/api/auth/google`
 
-window.onSignIn = function (googleUser) {
+onSignIn = function (googleUser) {
 
     var profile = googleUser.getBasicProfile();
 
@@ -26,12 +26,12 @@ window.onSignIn = function (googleUser) {
     .catch(console.log);
 };
 
-window.onFailure = function (error) {
+onFailure = function (error) {
 
     console.log(error);
 };
 
-window.renderButton = function () {
+renderButton = function () {
 
     window.gapi.load('auth2', () =>  {
 
