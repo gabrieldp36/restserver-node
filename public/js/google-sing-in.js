@@ -2,7 +2,7 @@ var url = ( window.location.hostname.includes('localhost') )
             ? `http://localhost:${window.location.port}/api/auth/google`
             : `https://restserver-node-gdp.herokuapp.com/api/auth/google`
 
-onSuccess = function (googleUser) {
+window.onSignIn = function (googleUser) {
 
     var profile = googleUser.getBasicProfile();
 
@@ -26,12 +26,20 @@ onSuccess = function (googleUser) {
     .catch(console.log);
 };
 
-onFailure = function (error) {
+window.onFailure = function (error) {
 
     console.log(error);
 };
 
-renderButton = function () {
+window.renderButton = function () {
+
+    window.gapi.load('auth2', () =>  {
+
+        window.gapi.signin2.render('google-signin-button', {
+            
+          onsuccess: this.onSignIn,
+        });
+    });
 
     gapi.signin2.render('my-signin2', {
         
@@ -40,7 +48,7 @@ renderButton = function () {
         'height': 50,
         'longtitle': true,
         'theme': 'dark',
-        'onsuccess': onSuccess,
+        'onsuccess': onSignIn,
         'onfailure': onFailure
     });
 };
