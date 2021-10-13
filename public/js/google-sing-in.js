@@ -1,68 +1,67 @@
-var url = ( window.location.hostname.includes('localhost') ) 
+const url = ( window.location.hostname.includes('localhost') ) 
             ? `http://localhost:${window.location.port}/api/auth/google`
             : `https://restserver-node-gdp.herokuapp.com/api/auth/google`
 
-onSignIn = function (googleUser) {
+const googleClientID = '778480152819-frrdc59gqm61ldn9lj8db7l0qn2l8gm1.apps.googleusercontent.com';
 
-    var profile = googleUser.getBasicProfile();
-
-    console.log('ID: ' + profile.getId());
-    console.log('Nombre: ' + profile.getGivenName());
-    console.log('Apellido: ' + profile.getFamilyName());
-    console.log('Imagen URL: ' + profile.getImageUrl());
-    console.log('Correo: ' + profile.getEmail());
-
-    var id_token = googleUser.getAuthResponse().id_token;
-
-    const data = {id_token}
+function handleCredentialResponse(response) {
+    
+    const body = {
+        id_token: response.credential
+    };
 
     fetch(url, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: JSON.stringify(body),
     headers: {'Content-Type': 'application/json'}
     })
-    .then ( response => response.json() )
-    .then ( data => console.log( 'Nuestro Server', data ) )
+    .then ( response => response.json()
+    )
+    .then ( data => {
+
+        console.log( 'Nuestro Server', data );
+
+        localStorage.setItem('correo', data.usuario.correo);
+    })
     .catch(console.log);
 };
 
-onFailure = function (error) {
+window.onload = function () {
 
-    console.log(error);
-};
+    google.accounts.id.initialize({
 
-renderButton = function () {
+      client_id: googleClientID,
 
-    window.gapi.load('auth2', () =>  {
-
-        window.gapi.signin2.render('google-signin-button', {
-            
-          onsuccess: this.onSignIn,
-        });
+      callback: handleCredentialResponse,
     });
 
-    gapi.signin2.render('my-signin2', {
-        
-        'scope': 'profile email',
-        'width': 240,
-        'height': 50,
-        'longtitle': true,
-        'theme': 'dark',
-        'onsuccess': onSignIn,
-        'onfailure': onFailure
-    });
+    google.accounts.id.renderButton(
+
+      document.getElementById('buttonDiv'),
+      
+      {
+        type:'standard',
+        size:'large',
+        theme: 'filled_blue', 
+        text:'signin_with',
+        shape:'circle',
+        logo_alignment:'left',
+        width: '275',}
+    );
 };
 
-function signOut() {
+ const signOut =  () => {
 
-    var auth2 = gapi.auth2.getAuthInstance();
+    google.accounts.id.disableAutoSelect();
+    
+    google.accounts.id.revoke(localStorage.getItem('correo'), () => {
 
-    auth2.signOut().then(function () {
+        localStorage.clear();
 
-        console.log('Usuario desconectado.');
+        location.reload();
     });
 };
 
 const anchorSingOut = document.getElementById('logout-google');
 
-anchorSingOut.addEventListener('click', () => signOut() );
+anchorSingOut.addEventListener('click',  () => signOut() );
