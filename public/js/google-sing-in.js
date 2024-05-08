@@ -18,6 +18,7 @@ function handleCredentialResponse(response) {
     .then ( response => response.json()
     )
     .then ( data => {
+        window.location.reload();
 
         console.log( 'Nuestro Server', data );
 
@@ -50,11 +51,12 @@ window.onload = function () {
     );
 };
 
- const signOut =  () => {
+const signOut =  () => {
 
     google.accounts.id.disableAutoSelect();
     
     google.accounts.id.revoke(localStorage.getItem('correo'), () => {
+        window.location.reload();
 
         localStorage.clear();
 
