@@ -4,7 +4,13 @@ El objeto de esta aplicación fue desarrollar un rest server robusto con rutas p
 
 Simula un rest server que utilizaría una cafetería para organizar y administar su plantilla de empleados y su stock, este último estructurado por categorías y productos, permitiendo realizar búsquedas insensibles de usuarios, categorías, productos en particular y productos por categorías.
 
-A continuación les copio el link a la documentación que sirve de guía para comprender el uso de cada uno de los servicios implementados: https://documenter.getpostman.com/view/17109440/U16qKPMZ
+A continuación les copio el link a la documentación que sirve de guía para comprender el uso de cada uno de los servicios implementados: https://documenter.getpostman.com/view/17109440/2sA3JKd2ta
+
+Para probar el Google Sign In, pueden ingresar al siguiente link. Luego en postman pueden consultar el listado de usuarios y verificar que el mismo ha sido correctamente creado.
+
+```
+https://restserver-node-production-87fa.up.railway.app/
+```
 
 ### Notas:
 
