@@ -1,6 +1,6 @@
 const url = ( window.location.hostname.includes('localhost') ) 
             ? `http://localhost:${window.location.port}/api/auth/google`
-            : `https://restserver-node-gdp.herokuapp.com/api/auth/google`
+            : `https://restserver-node-production-87fa.up.railway.app/api/auth/google`
 
 const googleClientID = '778480152819-frrdc59gqm61ldn9lj8db7l0qn2l8gm1.apps.googleusercontent.com';
 
