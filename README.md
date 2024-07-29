@@ -9,7 +9,7 @@ A continuación les copio el link a la documentación que sirve de guía para co
 Para probar el Google Sign In, pueden ingresar al siguiente link. Luego en postman pueden consultar el listado de usuarios y verificar que el mismo ha sido correctamente creado.
 
 ```
-https://restserver-node-production-87fa.up.railway.app/
+https://restserver-node-q8tk.onrender.com
 ```
 
 ### Notas:
